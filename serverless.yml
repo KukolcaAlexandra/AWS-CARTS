@@ -2,6 +2,9 @@ service: cart-service
 
 plugins:
   - serverless-offline
+  - serverless-dotenv-plugin
+
+useDotenv: true
 
 provider:
   name: aws
@@ -9,13 +12,31 @@ provider:
   stage: dev
   region: us-east-1
 
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLES: 1
+    DATABASE_HOST: ${env:DATABASE_HOST}
+    DATABASE_PORT: ${env:DATABASE_PORT}
+    DATABASE_USERNAME: ${env:DATABASE_USERNAME}
+    DATABASE_PASSWORD: ${env:DATABASE_PASSWORD}
+    DATABASE_NAME: ${env:DATABASE_NAME}
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - "rds:connect"
+        - "rds:CreateDBInstance"
+        - "rds:ModifyDBInstance"
+        - "rds:DeleteDBInstance"
+      Resource: 'arn:aws:rds:us-east-1:404553434652:db:database-rds'
+
 functions:
   main:
     handler: dist/main.handler
+    timeout: 10
     events:
       - http:
           method: ANY
-          path: api/profile/cart
+          path: /
       - http:
           method: ANY
           path: '{proxy+}'
