@@ -1,4 +1,4 @@
-import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus, Query, Param } from '@nestjs/common';
+import { Controller, Get, Delete, Put, Body, Post, Query, Param } from '@nestjs/common';
 import { CartService, CartItemsService } from './services';
 
 @Controller('carts')

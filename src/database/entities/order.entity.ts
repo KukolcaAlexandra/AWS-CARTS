@@ -1,24 +1,31 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Customer } from './customer.entity';
-import { Product } from './product.entity';
+import { Column, Entity, JoinColumn, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Status } from '../../cart/models';
+import { Cart } from './cart.entity';
 
-@Entity()
+@Entity({ name: 'orders' })
 export class Order {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'uuid', nullable: false })
-  productId: string;
+  @Column({ type: 'uuid', nullable: false})
+  userId: string;
 
-  @Column({ type: 'uuid', nullable: false })
-  customerId: string;
+  @ManyToOne(() => Cart, (cart) => cart.id)
+  @JoinColumn({ name: 'cart_id', referencedColumnName: 'id'})
+  cartId: string;
 
-  @Column({ type: 'integer', nullable: false })
-  amount: number;
+  @Column({ type: 'json'})
+  payment: any;
 
-  @ManyToOne(() => Customer, (customer) => customer.orders)
-  customer: Customer;
+  @Column({ type: 'json'})
+  delivery: any;
 
-  @ManyToOne(() => Product, (product) => product.orders)
-  product: Product;
+  @Column({ type: 'text'})
+  comments: string;
+
+  @Column({ type: 'integer'})
+  total: number;
+
+  @Column({ type: 'enum', enum: Status, default: Status.OPEN })
+  status: Status;
 }
