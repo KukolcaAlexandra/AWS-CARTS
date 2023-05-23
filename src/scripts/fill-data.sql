@@ -16,6 +16,24 @@ create table cart_items (
 	count integer
 );
 
+create table orders (
+	id uuid not null default uuid_generate_v4() primary key,
+	user_id uuid not null,
+	cart_id uuid not null references carts,
+	payment JSON,
+	delivery JSON,
+	comments text,
+	status status_type,
+	total integer
+);
+
+create table users (
+	id uuid not null default uuid_generate_v4() primary key,
+	user_name text,
+	email text,
+	password text
+);
+
 insert into carts (user_id, created_at, updated_at, status) values ('9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d', '2022-07-22', '2022-07-22', 'OPEN');
 insert into carts (user_id, created_at, updated_at, status) values ('9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6c', '2023-05-13', '2023-05-13', 'ORDERED');
 insert into carts (user_id, created_at, updated_at, status) values ('9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6e', '2023-05-14', '2023-05-14', 'OPEN');
@@ -23,3 +41,7 @@ insert into carts (user_id, created_at, updated_at, status) values ('9b1deb4d-3b
 insert into cart_items (cart_id, product_id, count) values ('1d76c877-daf7-4a4f-a48e-d6fab8c53f06', '22c6cc60-d8fe-11ed-aad5-030489c75e62', 2);
 insert into cart_items (cart_id, product_id, count) values ('bf58ace2-ba99-4742-971c-ca03807b1e46', 'aae176c0-e53a-11ed-87bf-637ef2d9ae04', 10);
 insert into cart_items (cart_id, product_id, count) values ('ab09bf3e-bf24-4fc0-992a-2299c85ff237', 'e360cbc0-e541-11ed-8700-a908b9998308', 5);
+
+insert into orders (user_id, cart_id, payment, delivery, comments, status, total) values ('9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d', '586573f2-97c5-4b4d-8482-6e2e8800e5ec', '{"type":"cash"}', '{"type":"courier"}', 'comment', 'ORDERED', 250);
+
+insert into users (user_name, email, password) values ('Test user', 'test_user@gmail.com', '123');

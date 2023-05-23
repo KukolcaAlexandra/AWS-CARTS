@@ -12,6 +12,11 @@ export class OrderController {
     return this.orderService.findByUserId(userId);
   }
 
+  @Get(':id')
+  findOrderById(@Param('id') id: string) {
+    return this.orderService.findById(id);
+  }
+
   @Post()
   createOrder(@Body() body) {
     return this.orderService.createOrder(body);

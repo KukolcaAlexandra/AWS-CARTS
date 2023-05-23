@@ -12,7 +12,7 @@ export class CartService {
   ) {}
 
   async findByUserId(userId: string): Promise<Cart> {
-    return this.cartRepo.findOne({ where: { userId: userId } });
+    return this.cartRepo.findOne({ where: { userId } });
   }
 
   async createCart(createCartDto: CreateCartDto) {

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CartItems } from '../../database/entities/cart-items.entity';
 import { CreateCartItemDto } from '../dto/create-cart-item.dto';
+import { UpdateCartItemDto } from '../dto/update-cart-item.dto';
 
 @Injectable()
 export class CartItemsService {
@@ -30,9 +31,9 @@ export class CartItemsService {
     return true;
   }
 
-  async updateCartItem(id: string, createCartItemDto: CreateCartItemDto) {
+  async updateCartItem(id: string, updateCartItemDto: UpdateCartItemDto) {
     try {
-      await this.cartItemsRepo.update({ id }, createCartItemDto);
+      await this.cartItemsRepo.update({ id }, updateCartItemDto);
     } catch (e) {
       return false;
     }

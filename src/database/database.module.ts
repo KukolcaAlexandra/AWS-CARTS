@@ -8,6 +8,7 @@ import { PersonalInfo } from './entities/personal-info.entity';
 //import { Store } from './entities/store.entity';
 import { Cart } from './entities/cart.entity';
 import { CartItems } from './entities/cart-items.entity';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { CartItems } from './entities/cart-items.entity';
        */
       namingStrategy: new SnakeNamingStrategy(),
     }),
-    TypeOrmModule.forFeature([Order, PersonalInfo, Cart, CartItems]),
+    TypeOrmModule.forFeature([Order, PersonalInfo, Cart, CartItems, User]),
   ],
   exports: [TypeOrmModule],
 })
