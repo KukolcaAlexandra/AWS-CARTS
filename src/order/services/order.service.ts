@@ -1,39 +1,51 @@
 import { Injectable } from '@nestjs/common';
-import { v4 } from 'uuid';
-
-import { Order } from '../models';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Order } from '../../database/entities/order.entity';
+import { CreateOrderDto } from '../dto/create-order.dto';
+import { UpdateOrderDto } from '../dto/update-order.dto';
 
 @Injectable()
 export class OrderService {
-  private orders: Record<string, Order> = {}
+  constructor(
+    @InjectRepository(Order)
+    private orderRepo: Repository<Order>
+  ) {}
 
-  findById(orderId: string): Order {
-    return this.orders[ orderId ];
+  async findByUserId(userId: string): Promise<Order> {
+    return this.orderRepo.findOne({ where: { userId: userId } });
   }
 
-  create(data: any) {
-    const id = v4(v4())
-    const order = {
-      ...data,
-      id,
-      status: 'inProgress',
-    };
-
-    this.orders[ id ] = order;
-
-    return order;
+  async findById(id: string): Promise<Order> {
+    return this.orderRepo.findOne({ where: { id } });
   }
 
-  update(orderId, data) {
-    const order = this.findById(orderId);
-
-    if (!order) {
-      throw new Error('Order does not exist.');
+  async createOrder(createOrderDto: CreateOrderDto) {
+    let res;
+    try {
+      res = await this.orderRepo.insert(createOrderDto);
+    } catch (e) {
+      return false;
     }
+    return res.identifiers;
+  }
 
-    this.orders[ orderId ] = {
-      ...data,
-      id: orderId,
+  async deleteOrder(id: string) {
+    let res;
+    try {
+      res = await this.orderRepo.delete({ id });
+    } catch (e) {
+      return false;
     }
+    return true;
+  }
+
+  async updateOrder(id: string, updateOrderDto: UpdateOrderDto) {
+    try {
+      await this.orderRepo.update({ id }, updateOrderDto);
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 }
