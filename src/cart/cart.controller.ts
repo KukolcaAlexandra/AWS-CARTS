@@ -23,6 +23,11 @@ export class CartController {
     return this.cartService.deleteCart(id);
   }
 
+  @Get('cart-items/:id')
+  findCartItemById(@Param('id') id: string) {
+    return this.cartItemsService.findCartItemById(id);
+  }
+
   @Post('cart-items')
   createCartItem(@Body() body) {
     return this.cartItemsService.createCartItem(body);

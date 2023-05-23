@@ -12,6 +12,10 @@ export class CartItemsService {
     private cartItemsRepo: Repository<CartItems>
   ) {}
   
+  async findCartItemById(id: string) {
+    return this.cartItemsRepo.findOne({ where: { id } });
+  }
+
   async createCartItem(createCartItemDto: CreateCartItemDto) {
     let res;
     try {
